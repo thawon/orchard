@@ -1,0 +1,15 @@
+<!-- hd = header -->
+<div ng-controller="HeaderClientController as header" ng-show="header.isShown">
+    <!-- TODO: do not display header carousel image when it is an admin user -->
+    <div class="carousel slide" data-ride="carousel">    
+        <div class="carousel-inner">
+            <div class="item active">
+                <img id="hd_banner_img" ng-src="{{header.banner}}" alt="tree">
+                <div class="container">
+                    <div class="carousel-caption">                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

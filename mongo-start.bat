@@ -1,0 +1,1 @@
+start cmd /c c:\mongodb\bin\mongod.exe -f c:\mongodb\mongod.conf

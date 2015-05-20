@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!--Created: Thu Apr 09 11:22:00 EST 2015-->
+  <url>
+    <loc>http://pineappleclub.com.au/</loc>
+    <lastmod>2015-04-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://pineappleclub.com.au/services</loc>
+    <lastmod>2015-04-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://pineappleclub.com.au/photos</loc>
+    <lastmod>2015-04-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://pineappleclub.com.au/philosophy</loc>
+    <lastmod>2015-04-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://pineappleclub.com.au/contact</loc>
+    <lastmod>2015-04-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+

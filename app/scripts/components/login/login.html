@@ -1,0 +1,18 @@
+﻿<!-- lg = login -->
+<form class="form-signin" role="form" ng-submit="login.login(login.credentials)">
+    
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <input type="email" id="email" class="form-control" placeholder="Email address" ng-model="login.credentials.email" 
+            required="" autofocus="">
+    <input type="password" id="password" class="form-control" placeholder="Password" ng-model="login.credentials.password" 
+            required="">
+    <label ng-if="login.errorMessage" id="lg_error_message" class="text-danger" ng-bind="login.errorMessage"></label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="remember-me">
+            Remember me
+        </label>
+    </div>
+    <button id="lg_login_button" class="btn btn-lg btn-primary btn-block" type="submit">
+        Sign in</button>
+</form>

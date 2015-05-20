@@ -1,0 +1,15 @@
+﻿<div>
+    <button ng-if="(mode === 'show')" class="btn btn-sm btn-primary" ng-click="edit()">Edit</button>
+    
+    <div class="view-detail-error label-error">
+
+    </div>
+
+    <div class="view-detail" ng-transclude>
+
+    </div>
+
+    <button ng-if="(mode !== 'show')" class="btn btn-sm btn-primary" ng-click="cancel()">Cancel</button>
+    <button ng-if="(mode !== 'show')" class="btn btn-sm btn-primary" ng-click="save()">Save</button>
+    <button ng-if="(mode !== 'show')" class="btn btn-sm btn-primary" ng-click="saveAndClose()">Save & Close</button>    
+</div>

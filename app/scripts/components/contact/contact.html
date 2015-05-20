@@ -1,0 +1,66 @@
+﻿<!-- cn = contact -->
+<div ng-controller="ContactController as contact">
+    <div>
+
+        <h2>Contact Us</h2>
+
+        <div id="lc_location_div" class="col-lg-8" ng-show="(contact.location.path() === '/contact')">
+
+            <p>
+                We are within minutes walk from Rockdale or Banksia Train Station. Our location is suitable for families
+                who commute to work by train. With plenty of free street parking, a lot of parents find it convenient that they
+                can drop off their child in the morning and then take a train to work.
+            </p>
+
+            <div id="mp_map_canvas" pcd-google-map></div>
+        </div>
+
+        <div class="col-lg-4">
+            <table>
+                <tbody>
+                    <tr>
+                        <td id="cn_image_td" rowspan="2">
+                            <img src="/images/phone.png" alt="phone" />
+                        </td>
+                        <td id="cn_phone_td">
+                            Phone:
+                        </td>
+                        <td>
+                            <a ng-href="tel:{{contact.companyInfo.contact.phone}}" ng-bind="contact.companyInfo.contact.phone"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mobile:
+                        </td>
+                        <td>
+                            <a ng-href="tel:{{contact.companyInfo.contact.mobile}}" ng-bind="contact.companyInfo.contact.mobile"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="/images/email.png" alt="email" />
+                        </td>
+                        <td>
+                            Email:
+                        </td>
+                        <td>
+                            <a ng-href="mailto:{{contact.companyInfo.contact.email}}" ng-bind="contact.companyInfo.contact.email"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Social</h2>
+            <!-- Place this code where you want the badge to render. -->
+            <a href="//plus.google.com/u/0/112050234532390644865?prsrc=3"
+               rel="publisher" target="_top" style="text-decoration:none;">
+                <img src="//ssl.gstatic.com/images/icons/gplus-32.png" alt="Google+" style="border:0;width:32px;height:32px;" />
+            </a>
+            <a href="https://www.facebook.com/pineappleclubfamilydaycare">
+                <img src="/images/facebook.png" alt="Facebook">
+            </a>
+        </div>
+
+    </div>
+</div>

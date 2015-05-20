@@ -1,0 +1,6 @@
+﻿<div ng-controller="HeaderAdminController as header" class="row">    
+    <div ng-if="header.getCurrentUser()" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <button id="hd_sign_out_button" type="button" class="btn btn-sm btn-default" ng-click="header.logout()">
+                Sign out</button>
+    </div>
+</div>

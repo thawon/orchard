@@ -1,0 +1,39 @@
+﻿<div class="container">    
+    <h2>Profile</h2>
+
+    <pcd-expandable-container data-header="Personal Details">
+        <pcd-entity-detail-container save-fn="userProfile.save()" cancel-fn="userProfile.cancel()" validate-fn="userProfile.validate()" mode-fn="userProfile.mode()">
+            <div data-detail data-mode="show">
+                <table class="table-views">
+                    <thead>
+                        <tr class="table-views-thead-tr">
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-input">First name:</td>
+                            <td class="label-input"><span ng-bind="userProfile.user.firstname"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-input">Last name:</td>
+                            <td class="label-input"><span ng-bind="userProfile.user.lastname"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div data-detail data-mode="edit">
+                <div>
+                    <div>
+                        <label class="label-input">First name</label>
+                        <input type="text" ng-model="userProfile.user.firstname" class="input-text-default">
+                    </div>
+                    <div>
+                        <label class="label-input">Last name</label>
+                        <input type="text" ng-model="userProfile.user.lastname" class="input-text-default">
+                    </div>
+                </div>
+            </div>
+        </pcd-entity-detail-container>
+    </pcd-expandable-container>
+</div>
