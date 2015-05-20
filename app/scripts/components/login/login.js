@@ -58,6 +58,9 @@
 
                 toaster.pop(waitToasterOptions);
 
+                // current user is user entity, not a plain javascript object
+                UserService.setCurrentUser(user);
+
                 // fetch using breezejs manager so the entity is added to the graph            
                 UserProfileService.getUser(user._id)
                 .then(function (user) {

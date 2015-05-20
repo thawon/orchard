@@ -57,12 +57,12 @@ describe('permission', function () {
 
         browser.get('/dashboard');
 
-        expect(browser.getCurrentUrl()).toContain('dashboard');
+        expect(browser.getCurrentUrl()).toBe('http://localhost:3000/');
 
     });
 
     it('admin-pages are accessible after user logins', function () {
-        
+
         httpBackendMock.add([
             {
                 method: 'POST',
@@ -104,7 +104,7 @@ describe('permission', function () {
         element(by.model('login.credentials.email')).sendKeys('email@valid.com');
         element(by.model('login.credentials.password')).sendKeys('password');
         element(by.css('.btn')).click();
-        
-        expect(browser.getCurrentUrl()).toContain('dashboard');
+
+        expect(browser.getCurrentUrl()).toBe('http://localhost:3000/');
     });
 });

@@ -2,13 +2,13 @@
 
     var service, findStates, $location;
 
-    beforeEach(module('pineappleclub.state-service'));
+    beforeEach(module('orchard.state-service'));
 
     beforeEach(inject(function (StateService, _$location_) {  
         findStates = function (name) {
             var states = [
                     {
-                        name: 'home',
+                        name: 'dashboard',
                         url: '/'
                     },
                     {
@@ -31,7 +31,7 @@
 
     it("change state",
     function () {
-        var home = findStates("home");
+        var home = findStates("dashboard");
 
         spyOn($location, "path");
 

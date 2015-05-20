@@ -16,7 +16,7 @@ exports.config = {
     onPrepare: function () {
 
         var htmlMock = function () {
-            angular.module('htmlMock', ['ngMockE2E', 'pineappleclub'])
+            angular.module('htmlMock', ['ngMockE2E', 'orchard'])
                 .run(function ($httpBackend) {
                     $httpBackend.whenGET(/\.html$/).passThrough();
                 });

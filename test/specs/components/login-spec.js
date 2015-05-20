@@ -5,7 +5,7 @@ describe('Unit: LoingController', function () {
     var createController, controller, $rootScope, rootScope, $q, AuthServiceMock, UserProfileServiceMock,
         StateServiceMock, UserServiceMock, AUTH_EVENTS, toasterMock;
 
-    beforeEach(module('breeze.angular', 'pineappleclub.login'));
+    beforeEach(module('breeze.angular', 'orchard.login'));
 
     beforeEach(inject(function (breeze, $controller, _$rootScope_, _$q_, _AUTH_EVENTS_, STRING) {
         $q = _$q_;

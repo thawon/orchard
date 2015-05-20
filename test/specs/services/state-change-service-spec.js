@@ -2,7 +2,7 @@
 
     var service, $rootScope, ngProgress, stateServiceMock, authServiceMock, USER_ROLES;
     
-    beforeEach(module('pineappleclub.authorisation-constant', 'pineappleclub.state-change-service',
+    beforeEach(module('orchard.authorisation-constant', 'orchard.state-change-service',
     function ($provide) {
         stateServiceMock = {
             changeState: function (stateName) { }

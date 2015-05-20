@@ -2,7 +2,7 @@
 
 describe('Unit: ApplicationController', function () {
 
-    beforeEach(module('pineappleclub.application'));
+    beforeEach(module('orchard.application'));
 
     var createController, rootScope, $q, ngProgressMock, AuthServiceMock,
         UserServiceMock, UserProfileServiceMock;

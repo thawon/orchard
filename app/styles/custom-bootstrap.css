@@ -6260,6 +6260,9 @@ table.version-control td {
   padding: 10px;
 }
 table.website {
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
   margin-top: 10px;
   width: 100%;
 }

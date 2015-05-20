@@ -2,7 +2,7 @@
 
     var service, $httpBackend, AUTHORISATION, USER_ROLES, cookieServiceMock;
 
-    beforeEach(module('pineappleclub.authorisation-constant', 'pineappleclub.auth-service',
+    beforeEach(module('orchard.authorisation-constant', 'orchard.auth-service',
     function ($provide) {
         cookieServiceMock = {
             getCookie: function (name) { },
