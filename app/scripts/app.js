@@ -2,30 +2,21 @@
 
     'use strict';
 
-    angular.module('pineappleclub', [
+    angular.module('orchard', [
         'ui.router',
         'breeze.angular',
         'ngResource',
         'ngProgress',
         'ngCookies',
         'toaster',
-        'angularUtils.directives.dirPagination',
-        'pineappleclub.application',
-        'pineappleclub.home',
-        'pineappleclub.navigator',
-        'pineappleclub.contact',
-        'pineappleclub.photos',
-        'pineappleclub.header-client',
-        'pineappleclub.header-admin',
-        'pineappleclub.footer',
-        'pineappleclub.side-bar',
-        'pineappleclub.dashboard',
-        'pineappleclub.login',
-        'pineappleclub.user-profile',
-        'pineappleclub.user-profile-list',
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.state-change-service',
-        'pineappleclub.auth-interceptor-service'
+        'ui.tree',
+        'orchard.application',
+        'orchard.navigator',
+        'orchard.dashboard',
+        'orchard.login',
+        'orchard.authorisation-constant',
+        'orchard.state-change-service',
+        'orchard.auth-interceptor-service'
     ])
     .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider',
         'AUTHORISATION',

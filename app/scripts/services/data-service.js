@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.data-service', [
-        'pineappleclub.entity-manager-factory'
+    angular.module('orchard.data-service', [
+        'orchard.entity-manager-factory'
     ])
     .factory('DataService', DataService);
 

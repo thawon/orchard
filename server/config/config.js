@@ -13,7 +13,7 @@
             port: process.env.port || 3000,
             ip: '127.0.0.1',
             key: 'connect.sid',
-            secret: 'pineappleclub_secret',
+            secret: 'orchard_secret',
             view: {
                 path: config.basePath + '/server/views',
                 engine: {

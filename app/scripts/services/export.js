@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.export-service', [])
+    angular.module('orchard.export-service', [])
     .factory('ExportService', ExportService);
 
     ExportService.$inject = [];

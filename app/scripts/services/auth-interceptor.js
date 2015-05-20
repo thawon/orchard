@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.auth-interceptor-service', [
-        'pineappleclub.auth-events-constant'
+    angular.module('orchard.auth-interceptor-service', [
+        'orchard.auth-events-constant'
     ])
     .factory('AuthInterceptor', AuthInterceptor);
 

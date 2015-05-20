@@ -2,25 +2,28 @@
 
     'use strict';
 
-    angular.module('pineappleclub.application', [
+    angular.module('orchard.application', [
         'ngProgress',
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.user-service',
-        'pineappleclub.user-profile-service'
+        'orchard.app-configuration-service',
+        'orchard.auth-service',
+        'orchard.user-service',
+        'orchard.user-profile-service',
+        'orchard.auth-events-constant'
     ])
     .controller('ApplicationController', ApplicationController);
 
     ApplicationController.$inject = [
+        '$rootScope',
         'ngProgress',
         'AppConfigurationService',
         'AuthService',
         'UserService',
-        'UserProfileService'
+        'UserProfileService',
+        'AUTH_EVENTS'
     ];
 
-    function ApplicationController(ngProgress, AppConfigurationService,
-        AuthService, UserService, UserProfileService) {
+    function ApplicationController($rootScope, ngProgress, AppConfigurationService,
+        AuthService, UserService, UserProfileService, AUTH_EVENTS) {
 
         var that = this;
         
@@ -46,6 +49,8 @@
 
                 // current user is user entity, not a plain javascript object
                 UserService.setCurrentUser(user);
+
+                $rootScope.$broadcast(AUTH_EVENTS.authenticated)
             })
 
         });

@@ -2,9 +2,9 @@
 
     'use strict';    
 
-    angular.module('pineappleclub.auth-service', [
-        'pineappleclub.cookie-service',
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.auth-service', [
+        'orchard.cookie-service',
+        'orchard.app-configuration-service'
     ])
     .factory('AuthService', AuthService);
 

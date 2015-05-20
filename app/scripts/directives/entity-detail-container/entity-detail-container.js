@@ -2,9 +2,9 @@
 
     'use strict';
 
-    angular.module('pineappleclub.entity-detail-container', [
-        'pineappleclub.view-modes-constant',
-        'pineappleclub.export-service'
+    angular.module('orchard.entity-detail-container', [
+        'orchard.view-modes-constant',
+        'orchard.export-service'
     ])
     .directive('pcdEntityDetailContainer', EntityDetailContainerDirective);
 

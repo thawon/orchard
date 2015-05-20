@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-model', [
-        'pineappleclub.util-service'
+    angular.module('orchard.user-model', [
+        'orchard.util-service'
     ])
     .factory('UserModelService', UserModelService);
 

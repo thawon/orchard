@@ -6,8 +6,8 @@
 (function() {
     'use strict';
 
-    angular.module("pineappleclub.meta-data", [
-        'pineappleclub.user-model'
+    angular.module("orchard.meta-data", [
+        'orchard.user-model'
     ])
     .factory('metadata', Metadata);
 

@@ -9,9 +9,9 @@
 (function() {
     'use strict';
 
-    angular.module('pineappleclub.entity-manager-factory', [
-        'pineappleclub.model',
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.entity-manager-factory', [
+        'orchard.model',
+        'orchard.app-configuration-service'
     ])
     .factory('EntityManagerFactory', EntityManagerFactory);
 

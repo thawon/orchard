@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.util-service', [])
+    angular.module('orchard.util-service', [])
     .factory('UtilService', UtilService);
 
     UtilService.$inject = [];

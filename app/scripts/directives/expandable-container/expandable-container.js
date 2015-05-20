@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.expandable-container', [])
+    angular.module('orchard.expandable-container', [])
     .directive('pcdExpandableContainer', ExpandableContainer);
 
     ExpandableContainer.$inject = [];

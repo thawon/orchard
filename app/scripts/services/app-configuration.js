@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.app-configuration-service', [])
+    angular.module('orchard.app-configuration-service', [])
     .factory('AppConfigurationService', AppConfigurationService);
 
     AppConfigurationService.$inject = [];
@@ -13,7 +13,7 @@
                 name: 'orchard'
             },
             page: {
-                titlePrefix: 'Pineapple Club'
+                titlePrefix: 'orchard'
             },            
             companyInfo: {
                 name: 'orchard'

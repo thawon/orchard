@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-profile-service', [
-        'pineappleclub.entity-manager-factory'
+    angular.module('orchard.user-profile-service', [
+        'orchard.entity-manager-factory'
     ])
     .factory('UserProfileService', UserProfileService);
 

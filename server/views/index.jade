@@ -1,15 +1,15 @@
 doctype html
 
-html(lang="en", ng-app="pineappleclub")
+html(lang="en", ng-app="orchard")
   head
     base(href="/index.html")
-    title="Orchard coding test"
-    meta(name="google-site-verification", content="NtzdEuPKDVSmYCyX4rWinbQER6YkqS8F5e0fWNgtTsg")
-    meta(name="description", content="High quality child care service supported by Integricare. Our location is near Rockdale and Banksia train station. Family Day Care, Before/After school care, Vocation care")
+    title="Orchard coding test"    
+    meta(name="description", content="Orchard coding test description")
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(rel='stylesheet', href='styles/custom-bootstrap.css')
+    link(rel='stylesheet', href='styles/angular-ui-tree.min.css')
   body(ng-controller="ApplicationController")    
     div#wrap
       div(ng-include="'scripts/components/header/header.html'")
@@ -31,14 +31,13 @@ html(lang="en", ng-app="pineappleclub")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.11/angular-ui-router.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.9/toaster.min.js")
+    script(src="scripts/vendors/angular-ui-tree.min.js")
     script(src="scripts/vendors/ngProgress.min.js")
-    script(src="scripts/vendors/plusgallery.js")
     script(src="scripts/vendors/breeze.debug.js")
     script(src="scripts/vendors/breeze.dataService.mongo.js")    
     script(src="scripts/vendors/breeze.bridge.angular.js")
     script(src="scripts/vendors/breeze.metadata-helper.js")
-    script(src="scripts/vendors/breeze.saveErrorExtensions.js")
-    script(src="https://maps.googleapis.com/maps/api/js?v=3.exp")    
+    script(src="scripts/vendors/breeze.saveErrorExtensions.js")    
     each script in scripts
       script(src="#{script}")
     

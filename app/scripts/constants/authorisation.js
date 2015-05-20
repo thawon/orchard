@@ -66,8 +66,8 @@
                 },
                 {
                     name: 'project-admin',
-                    display: 'Porject Admin',
-                    url: '/intranet',
+                    display: 'Project Admin',
+                    url: '/project-admin',
                     templateUrl: 'scripts/components/intranet/intranet.html',
                     data: {
                         authorizedRoles: [USER_ROLES.admin],
@@ -85,7 +85,7 @@
         STATES: STATES
     };
 
-    angular.module('pineappleclub.authorisation-constant', [])
+    angular.module('orchard.authorisation-constant', [])
     .constant('AUTHORISATION', AUTHORISATION);
 
 }());

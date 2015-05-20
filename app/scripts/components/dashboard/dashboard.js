@@ -2,27 +2,29 @@
 
     'use strict';
 
-    angular.module('pineappleclub.dashboard', [
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.view-modes-constant',
-        'pineappleclub.user-service'
+    angular.module('orchard.dashboard', [
+        'orchard.view-modes-constant',
+        'orchard.client-service',
+        'orchard.entity-detail-container',
+        'orchard.expandable-container',
     ])
     .controller('DashboardController', DashboardController);
 
     DashboardController.$inject = [
-        'AUTHORISATION',
         'VIEW_MODES',
-        'UserService'
+        'ClientService'
     ];
 
-    function DashboardController(AUTHORISATION, VIEW_MODES, UserService) {
+    function DashboardController(VIEW_MODES, ClientService) {
         var that = this;
         
         that.mode = mode;
 
         function mode() {
-            return 'show';
+            return VIEW_MODES.show;
         }
+
+        that.data = ClientService.getClients();
     }
 
 }());

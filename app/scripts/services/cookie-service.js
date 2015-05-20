@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.cookie-service', [])
+    angular.module('orchard.cookie-service', [])
     .factory('CookieService', CookieService);
 
     CookieService.$inject = [];

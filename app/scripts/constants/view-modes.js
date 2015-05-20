@@ -8,7 +8,7 @@
         create: 'create',
     };
 
-    angular.module('pineappleclub.view-modes-constant', [])
+    angular.module('orchard.view-modes-constant', [])
     .constant('VIEW_MODES', VIEW_MODES);
 
 }());

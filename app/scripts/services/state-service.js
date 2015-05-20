@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.state-service', [
-        'pineappleclub.authorisation-constant'
+    angular.module('orchard.state-service', [
+        'orchard.authorisation-constant'
     ])
     .factory('StateService', StateService);
 

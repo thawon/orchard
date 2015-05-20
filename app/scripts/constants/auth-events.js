@@ -13,7 +13,7 @@
         notAuthorized: 'auth-not-authorized'
     };
 
-    angular.module('pineappleclub.auth-events-constant', [])
+    angular.module('orchard.auth-events-constant', [])
     .constant('AUTH_EVENTS', AUTH_EVENTS);
 
 }());

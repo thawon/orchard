@@ -14,9 +14,9 @@
 
     'use strict';
 
-    angular.module('pineappleclub.model', [
-        'pineappleclub.meta-data',
-        'pineappleclub.user-model'
+    angular.module('orchard.model', [
+        'orchard.meta-data',
+        'orchard.user-model'
     ])
     .factory('model', factory);
 

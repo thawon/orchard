@@ -2,8 +2,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.navigator-service', [
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.navigator-service', [
+        'orchard.app-configuration-service'
     ])
     .factory('NavigatorService', NavigatorService);
 

@@ -2,30 +2,21 @@
 
     'use strict';
 
-    angular.module('pineappleclub', [
+    angular.module('orchard', [
         'ui.router',
         'breeze.angular',
         'ngResource',
         'ngProgress',
         'ngCookies',
         'toaster',
-        'angularUtils.directives.dirPagination',
-        'pineappleclub.application',
-        'pineappleclub.home',
-        'pineappleclub.navigator',
-        'pineappleclub.contact',
-        'pineappleclub.photos',
-        'pineappleclub.header-client',
-        'pineappleclub.header-admin',
-        'pineappleclub.footer',
-        'pineappleclub.side-bar',
-        'pineappleclub.dashboard',
-        'pineappleclub.login',
-        'pineappleclub.user-profile',
-        'pineappleclub.user-profile-list',
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.state-change-service',
-        'pineappleclub.auth-interceptor-service'
+        'ui.tree',
+        'orchard.application',
+        'orchard.navigator',
+        'orchard.dashboard',
+        'orchard.login',
+        'orchard.authorisation-constant',
+        'orchard.state-change-service',
+        'orchard.auth-interceptor-service'
     ])
     .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider',
         'AUTHORISATION',
@@ -68,25 +59,28 @@
 
     'use strict';
 
-    angular.module('pineappleclub.application', [
+    angular.module('orchard.application', [
         'ngProgress',
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.user-service',
-        'pineappleclub.user-profile-service'
+        'orchard.app-configuration-service',
+        'orchard.auth-service',
+        'orchard.user-service',
+        'orchard.user-profile-service',
+        'orchard.auth-events-constant'
     ])
     .controller('ApplicationController', ApplicationController);
 
     ApplicationController.$inject = [
+        '$rootScope',
         'ngProgress',
         'AppConfigurationService',
         'AuthService',
         'UserService',
-        'UserProfileService'
+        'UserProfileService',
+        'AUTH_EVENTS'
     ];
 
-    function ApplicationController(ngProgress, AppConfigurationService,
-        AuthService, UserService, UserProfileService) {
+    function ApplicationController($rootScope, ngProgress, AppConfigurationService,
+        AuthService, UserService, UserProfileService, AUTH_EVENTS) {
 
         var that = this;
         
@@ -112,6 +106,8 @@
 
                 // current user is user entity, not a plain javascript object
                 UserService.setCurrentUser(user);
+
+                $rootScope.$broadcast(AUTH_EVENTS.authenticated)
             })
 
         });
@@ -123,50 +119,29 @@
 
     'use strict';
 
-    angular.module('pineappleclub.contact', [
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.google-map-directive'
-    ])
-    .controller('ContactController', ContactController);
-
-    ContactController.$inject = [
-        '$location',
-        'AppConfigurationService'
-    ];
-
-    function ContactController($location, AppConfigurationService) {
-
-        this.location = $location;
-        this.companyInfo = AppConfigurationService.companyInfo;
-
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.dashboard', [
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.view-modes-constant',
-        'pineappleclub.user-service'
+    angular.module('orchard.dashboard', [
+        'orchard.view-modes-constant',
+        'orchard.client-service',
+        'orchard.entity-detail-container',
+        'orchard.expandable-container',
     ])
     .controller('DashboardController', DashboardController);
 
     DashboardController.$inject = [
-        'AUTHORISATION',
         'VIEW_MODES',
-        'UserService'
+        'ClientService'
     ];
 
-    function DashboardController(AUTHORISATION, VIEW_MODES, UserService) {
+    function DashboardController(VIEW_MODES, ClientService) {
         var that = this;
         
         that.mode = mode;
 
         function mode() {
-            return 'show';
+            return VIEW_MODES.show;
         }
+
+        that.data = ClientService.getClients();
     }
 
 }());
@@ -174,150 +149,13 @@
 
     'use strict';
 
-    angular.module('pineappleclub.footer', [
-        'pineappleclub.authorisation-constant'
-    ])
-    .controller('FooterController', FooterController);
-
-    FooterController.$inject = [
-        'AUTHORISATION'
-    ];
-
-    function FooterController(AUTHORISATION) {
-        var that = this,
-            states;
-
-        states = _.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return state.name === 'philosophy'
-                    || state.name === 'contact';
-            });
-
-
-        that.states = states;
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.header-admin', [
-        'pineappleclub.state-service',
-        'pineappleclub.user-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.auth-events-constant'
-    ])
-    .controller('HeaderAdminController', HeaderAdminController);
-
-    HeaderAdminController.$inject = [
-        '$rootScope',
-        'AuthService',
-        'StateService',
-        'UserService',
-        'AUTH_EVENTS'
-    ];
-
-    function HeaderAdminController($rootScope, AuthService, StateService,
-        UserService, AUTH_EVENTS) {
-
-        var that = this;
-
-        that.getCurrentUser = UserService.getCurrentUser;
-
-        that.logout = function () {
-            AuthService.logout()
-            .then(function (res) {
-                UserService.setCurrentUser(null);
-
-                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-
-                StateService.changeState("signout");
-            });
-        }
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.header-client', [
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.device-sizes-constant',
-        'pineappleclub.export-service',
-        'pineappleclub.util-service'
-    ])
-    .controller('HeaderClientController', HeaderClientController);
-
-    HeaderClientController.$inject = [
-        '$timeout',
-        '$rootScope',
-        'AUTHORISATION',
-        'DEVICE_SIZES',
-        'ExportService',
-        'UtilService'
-    ];
-
-    function HeaderClientController($timeout, $rootScope,
-        AUTHORISATION, DEVICE_SIZES, ExportService, UtilService) {
-
-        var that = this;
-
-        that.configs = {
-            IMG_BIGBANNER: "/images/tree-big.png",
-            IMG_SMALLBANNER: "/images/tree-small.png"
-        };        
-
-        ExportService.addEventListener("resize",
-            $.proxy(
-                function () {
-                    $timeout($.proxy(that.resize, that));
-                }, that), false);
-
-        $rootScope.$on("$stateChangeSuccess", function (event, next) {
-            var allowedStates = _.filter(AUTHORISATION.STATES.states,
-                                    function (state) { return state.name === "login" || state.name === "signout"; });
-
-            that.isShown = (_.find(next.data.authorizedRoles, function (role) { return role === AUTHORISATION.USER_ROLES.admin; })
-                                || _.find(allowedStates, function (state) { return state.name === next.name; }))
-                                ? false : true;
-        });
-        
-        that.isShown = true;
-
-        resize();
-
-        function resize() {
-            that.banner = UtilService.device.isBreakpoint(DEVICE_SIZES.XS) ?
-                            that.configs.IMG_SMALLBANNER : that.configs.IMG_BIGBANNER;
-        };
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.home', [])
-        .controller('HomeController', HomeController);
-
-    HomeController.$inject = [];
-
-    function HomeController() {}
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.login', [
-        'pineappleclub.auth-service',
-        'pineappleclub.state-service',
-        'pineappleclub.user-service',
-        'pineappleclub.auth-events-constant',
-        'pineappleclub.string-constant',
-        'pineappleclub.user-profile-service'
+    angular.module('orchard.login', [
+        'orchard.auth-service',
+        'orchard.state-service',
+        'orchard.user-service',
+        'orchard.auth-events-constant',
+        'orchard.string-constant',
+        'orchard.user-profile-service'
     ])
         .controller('LoginController', LoginController);
 
@@ -409,202 +247,62 @@
 
     'use strict';
 
-    angular.module('pineappleclub.navigator', [
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.authorisation-constant'
+    angular.module('orchard.navigator', [
+        'orchard.app-configuration-service',
+        'orchard.authorisation-constant',
+        'orchard.auth-events-constant',
+        'orchard.auth-service',
+        'orchard.user-service',
+        'orchard.state-service',
     ])
     .controller('NavigatorController', NavigatorController);
 
     NavigatorController.$inject = [
-        'AppConfigurationService',
-        'AUTHORISATION'
-    ];
-
-    function NavigatorController(AppConfigurationService, AUTHORISATION) {
-        var that = this,
-            states;
-        
-        states = _.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return (state.data.authorizedRoles.indexOf(AUTHORISATION.USER_ROLES.admin) !== -1)
-                        && state.name !== 'dashboard';
-            });
-
-        that.states = states;                
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.photos', [
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.plus-gallery-directive'
-    ])
-    .controller('PhotosController', PhotosController);
-
-    PhotosController.$inject = [
-        'AppConfigurationService'
-    ];
-
-    function PhotosController(AppConfigurationService) {
-
-        var that = this;
-
-        that.userId = AppConfigurationService.googlePlusUserId;
-
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.side-bar', [
-        'pineappleclub.device-height-directive',
-        'pineappleclub.app-configuration-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.authorisation-constant',
-        'pineappleclub.auth-events-constant'
-    ])
-    .controller('SideBarController', SideBarController);
-
-    SideBarController.$inject = [
         '$rootScope',
         'AppConfigurationService',
-        'AuthService',
         'AUTHORISATION',
-        'AUTH_EVENTS'
+        'AUTH_EVENTS',
+        'AuthService',
+        'UserService',
+        'StateService'
     ];
 
-    function SideBarController($rootScope, AppConfigurationService, AuthService,
-        AUTHORISATION, AUTH_EVENTS) {
+    function NavigatorController($rootScope, AppConfigurationService,
+        AUTHORISATION, AUTH_EVENTS, AuthService, UserService, StateService) {
 
         var that = this,
             states;
-
-        that.configs = {
-            ELE_SIDEBAR: ".row-offcanvas",
-            CONS_ACTIVE: "active",
-            CSS_SIDEBARSHOW: "side-bar-show",
-            CSS_SIDEBARHIDE: "side-bar-hide"
-        };
         
+        that.show = false;
+
         states = _.filter(AUTHORISATION.STATES.states,
             function (state) {
-                return state.name === 'home'
-                    || state.name === 'services'
-                    || state.name === 'philosophy'
-                    || state.name === 'photos'
-                    || state.name === 'contact';
+                return (state.data.authorizedRoles.indexOf(AUTHORISATION.USER_ROLES.admin) !== -1);
             });
 
-        that.dashboardState = _.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return state.name === 'dashboard'
-            })[0];
-
-        that.project = AppConfigurationService.companyInfo;
         that.states = states;
-        that.isShownDashboard = AuthService.isAuthenticated();
-        that.toggleSideBar = $.proxy(toggleSideBar, that);
+        that.signout = signout;
 
         $rootScope.$on(AUTH_EVENTS.loginSuccess, function () {
-            that.isShownDashboard = true;
+            that.show = true;
         });
 
         $rootScope.$on(AUTH_EVENTS.authenticated, function () {
-            that.isShownDashboard = true;
+            that.show = true;
         });
 
         $rootScope.$on(AUTH_EVENTS.logoutSuccess, function () {
-            that.isShownDashboard = false;
+            that.show = false;
         });
 
-        function toggleSideBar() {
-            $(that.configs.ELE_SIDEBAR).toggleClass(that.configs.CONS_ACTIVE);
-        }        
-    }
+        function signout() {
+            AuthService.logout()
+            .then(function (res) {
+                UserService.setCurrentUser(null);
 
-}());
-(function () {
+                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 
-    'use strict';
-
-    angular.module('pineappleclub.user-profile-list-service', [
-        'pineappleclub.entity-manager-factory'
-    ])
-    .factory('UserProfileListService', UserProfileListService);
-
-    UserProfileListService.$inject = [
-        'EntityManagerFactory'        
-    ];
-
-    function UserProfileListService(EntityManagerFactory, UserService) {
-        var manager = EntityManagerFactory.getManager(),
-            userProfileListService = {
-                getUsers: getUsers
-            }
-
-        return userProfileListService;
-
-        function getUsers(accountId, pageNumber) {
-            var query = breeze.EntityQuery.from('Users')
-                        .where('account_id', '==', accountId)
-                        .skip(2 * (pageNumber - 1))
-                        .take(2)
-                        .inlineCount();
-
-            return manager.executeQuery(query)
-                .then(function (data) {
-                    return data;
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
-
-        }
-
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.user-profile-list', [
-        'pineappleclub.user-profile-list-service'
-    ])
-    .controller('UserProfileListController', UserProfileListController);
-
-    UserProfileListController.$inject = [
-        'UserProfileListService'
-    ];
-
-    function UserProfileListController(UserProfileListService) {
-        var that = this;
-
-        that.users = null;
-        that.totalUsers = 0;
-        // this should match however many results your API puts on one page
-        that.usersPerPage = 25;
-
-        getResultsPage(1);
-
-        that.pagination = {
-            current: 1
-        };
-
-        that.pageChanged = function (newPage) {
-            getResultsPage(newPage);
-        };
-
-        function getResultsPage(pageNumber) {
-            UserProfileListService.getUsers('5557c029ce48f30d543cbfc6', pageNumber)
-            .then(function (data) {
-                that.users = data.results;
-                that.totalUsers = data.inlineCount;
+                StateService.changeState("signout");
             });
         }
     }
@@ -614,8 +312,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-model', [
-        'pineappleclub.util-service'
+    angular.module('orchard.user-model', [
+        'orchard.util-service'
     ])
     .factory('UserModelService', UserModelService);
 
@@ -655,8 +353,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-profile-service', [
-        'pineappleclub.entity-manager-factory'
+    angular.module('orchard.user-profile-service', [
+        'orchard.entity-manager-factory'
     ])
     .factory('UserProfileService', UserProfileService);
 
@@ -690,69 +388,6 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-profile', [
-        'pineappleclub.entity-detail-container',
-        'pineappleclub.expandable-container',
-        'pineappleclub.user-profile-service',
-        'pineappleclub.data-service',
-        'pineappleclub.user-service',
-        'pineappleclub.view-modes-constant'
-    ])
-    .controller('UserProfileController', UserProfileController);
-
-    UserProfileController.$inject = [
-        '$stateParams',
-        'UserProfileService',
-        'DataService',
-        'UserService',
-        'VIEW_MODES'
-    ];
-
-    function UserProfileController($stateParams, UserProfileService, DataService, UserService, VIEW_MODES) {
-        var that = this;
-
-        that.user = UserService.getCurrentUser();
-
-        that.save = DataService.saveChanges();
-
-        that.validate = validate;
-
-        that.cancel = cancel;
-
-        that.mode = mode;        
-
-        if (that.mode() === VIEW_MODES.new) {
-            // create new entity
-        } else {
-            // useid to get user entity
-        }
-
-
-        function validate() {
-            var user = that.user,
-                errors = user.entityAspect.getValidationErrors(),
-                result = {
-                    hasError: (errors.length > 0) ? true : false,
-                    Errors: _.pluck(errors, 'errorMessage')
-                };
-
-            return result;
-        }
-
-        function cancel() {
-            that.user.entityAspect.rejectChanges();
-        }
-
-        function mode() {
-            return $stateParams.mode;
-        }
-    }
-
-}());
-(function () {
-
-    'use strict';
-
     var AUTH_EVENTS = {
         loginSuccess: 'auth-login-success',
         loginFailed: 'auth-login-failed',
@@ -764,7 +399,7 @@
         notAuthorized: 'auth-not-authorized'
     };
 
-    angular.module('pineappleclub.auth-events-constant', [])
+    angular.module('orchard.auth-events-constant', [])
     .constant('AUTH_EVENTS', AUTH_EVENTS);
 
 }());
@@ -836,8 +471,8 @@
                 },
                 {
                     name: 'project-admin',
-                    display: 'Porject Admin',
-                    url: '/intranet',
+                    display: 'Project Admin',
+                    url: '/project-admin',
                     templateUrl: 'scripts/components/intranet/intranet.html',
                     data: {
                         authorizedRoles: [USER_ROLES.admin],
@@ -855,7 +490,7 @@
         STATES: STATES
     };
 
-    angular.module('pineappleclub.authorisation-constant', [])
+    angular.module('orchard.authorisation-constant', [])
     .constant('AUTHORISATION', AUTHORISATION);
 
 }());
@@ -870,7 +505,7 @@
         L: "lg"
     };
 
-    angular.module('pineappleclub.device-sizes-constant', [])
+    angular.module('orchard.device-sizes-constant', [])
     .constant('DEVICE_SIZES', DEVICE_SIZES);
 
 }());
@@ -882,7 +517,7 @@
         empty: ""
     };
 
-    angular.module('pineappleclub.string-constant', [])
+    angular.module('orchard.string-constant', [])
     .constant('STRING', STRING);
 
 }());
@@ -896,7 +531,7 @@
         create: 'create',
     };
 
-    angular.module('pineappleclub.view-modes-constant', [])
+    angular.module('orchard.view-modes-constant', [])
     .constant('VIEW_MODES', VIEW_MODES);
 
 }());
@@ -904,40 +539,9 @@
 
     'use strict';
 
-    angular.module('pineappleclub.device-height-directive', [
-        'pineappleclub.export-service'
-    ])
-    .directive('pcdDeviceHeight', DeviceHeightDirective);
-
-    DeviceHeightDirective.$inject = [
-        'ExportService'
-    ];
-
-    function DeviceHeightDirective(ExportService) {
-
-        var directive = {
-            link: function (scope, element, attrs) {
-                $(element).height($(ExportService).height());
-            }
-        }
-
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                directive.link(scope, element, attrs);
-            }
-        }
-
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.entity-detail-container', [
-        'pineappleclub.view-modes-constant',
-        'pineappleclub.export-service'
+    angular.module('orchard.entity-detail-container', [
+        'orchard.view-modes-constant',
+        'orchard.export-service'
     ])
     .directive('pcdEntityDetailContainer', EntityDetailContainerDirective);
 
@@ -1076,7 +680,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.expandable-container', [])
+    angular.module('orchard.expandable-container', [])
     .directive('pcdExpandableContainer', ExpandableContainer);
 
     ExpandableContainer.$inject = [];
@@ -1113,593 +717,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.google-map-directive', [])
-    .directive('pcdGoogleMap', GoogleMapDirective);
-
-    GoogleMapDirective.$inject = [
-        'AppConfigurationService'
-    ];
-
-    function GoogleMapDirective(AppConfigurationService) {
-
-        var directive = {
-            link: function (scope, element, attrs) {
-                var companyInfo = AppConfigurationService.companyInfo,
-                    map, options;
-
-                options = {
-                    zoom: 17,
-                    center: new google.maps.LatLng(companyInfo.location.lat, companyInfo.location.lng)
-                };
-
-                map = new google.maps.Map($(element).get(0), options);
-            }
-        }
-
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                directive.link(scope, element, attrs);
-            }
-        }
-
-    }
-
-}());
-/**
- * dirPagination - AngularJS module for paginating (almost) anything.
- *
- *
- * Credits
- * =======
- *
- * Daniel Tabuenca: https://groups.google.com/d/msg/angular/an9QpzqIYiM/r8v-3W1X5vcJ
- * for the idea on how to dynamically invoke the ng-repeat directive.
- *
- * I borrowed a couple of lines and a few attribute names from the AngularUI Bootstrap project:
- * https://github.com/angular-ui/bootstrap/blob/master/src/pagination/pagination.js
- *
- * Copyright 2014 Michael Bromley <michael@michaelbromley.co.uk>
- */
-
-(function() {
-
-    /**
-     * Config
-     */
-    var moduleName = 'angularUtils.directives.dirPagination';
-    var DEFAULT_ID = '__default';
-
-    /**
-     * Module
-     */
-    var module;
-    try {
-        module = angular.module(moduleName);
-    } catch(err) {
-        // named module does not exist, so create one
-        module = angular.module(moduleName, []);
-    }
-
-    module
-        .directive('dirPaginate', ['$compile', '$parse', 'paginationService', dirPaginateDirective])
-        .directive('dirPaginateNoCompile', noCompileDirective)
-        .directive('dirPaginationControls', ['paginationService', 'paginationTemplate', dirPaginationControlsDirective])
-        .filter('itemsPerPage', ['paginationService', itemsPerPageFilter])
-        .service('paginationService', paginationService)
-        .provider('paginationTemplate', paginationTemplateProvider)
-        .run(['$templateCache',dirPaginationControlsTemplateInstaller]);
-
-    function dirPaginateDirective($compile, $parse, paginationService) {
-
-        return  {
-            terminal: true,
-            multiElement: true,
-            compile: dirPaginationCompileFn
-        };
-
-        function dirPaginationCompileFn(tElement, tAttrs){
-
-            var expression = tAttrs.dirPaginate;
-            // regex taken directly from https://github.com/angular/angular.js/blob/master/src/ng/directive/ngRepeat.js#L211
-            var match = expression.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
-
-            var filterPattern = /\|\s*itemsPerPage\s*:[^|]*/;
-            if (match[2].match(filterPattern) === null) {
-                throw 'pagination directive: the \'itemsPerPage\' filter must be set.';
-            }
-            var itemsPerPageFilterRemoved = match[2].replace(filterPattern, '');
-            var collectionGetter = $parse(itemsPerPageFilterRemoved);
-
-            addNoCompileAttributes(tElement);
-
-            // If any value is specified for paginationId, we register the un-evaluated expression at this stage for the benefit of any
-            // dir-pagination-controls directives that may be looking for this ID.
-            var rawId = tAttrs.paginationId || DEFAULT_ID;
-            paginationService.registerInstance(rawId);
-
-            return function dirPaginationLinkFn(scope, element, attrs){
-
-                // Now that we have access to the `scope` we can interpolate any expression given in the paginationId attribute and
-                // potentially register a new ID if it evaluates to a different value than the rawId.
-                var paginationId = $parse(attrs.paginationId)(scope) || attrs.paginationId || DEFAULT_ID;
-                paginationService.registerInstance(paginationId);
-
-                var repeatExpression = getRepeatExpression(expression, paginationId);
-                addNgRepeatToElement(element, attrs, repeatExpression);
-
-                removeTemporaryAttributes(element);
-                var compiled =  $compile(element);
-
-                var currentPageGetter = makeCurrentPageGetterFn(scope, attrs, paginationId);
-                paginationService.setCurrentPageParser(paginationId, currentPageGetter, scope);
-
-                if (typeof attrs.totalItems !== 'undefined') {
-                    paginationService.setAsyncModeTrue(paginationId);
-                    scope.$watch(function() {
-                        return $parse(attrs.totalItems)(scope);
-                    }, function (result) {
-                        if (0 <= result) {
-                            paginationService.setCollectionLength(paginationId, result);
-                        }
-                    });
-                } else {
-                    scope.$watchCollection(function() {
-                        return collectionGetter(scope);
-                    }, function(collection) {
-                        if (collection) {
-                            paginationService.setCollectionLength(paginationId, collection.length);
-                        }
-                    });
-                }
-
-                // Delegate to the link function returned by the new compilation of the ng-repeat
-                compiled(scope);
-            };
-        }
-
-        /**
-         * If a pagination id has been specified, we need to check that it is present as the second argument passed to
-         * the itemsPerPage filter. If it is not there, we add it and return the modified expression.
-         *
-         * @param expression
-         * @param paginationId
-         * @returns {*}
-         */
-        function getRepeatExpression(expression, paginationId) {
-            var repeatExpression,
-                idDefinedInFilter = !!expression.match(/(\|\s*itemsPerPage\s*:[^|]*:[^|]*)/);
-
-            if (paginationId !== DEFAULT_ID && !idDefinedInFilter) {
-                repeatExpression = expression.replace(/(\|\s*itemsPerPage\s*:[^|]*)/, "$1 : '" + paginationId + "'");
-            } else {
-                repeatExpression = expression;
-            }
-
-            return repeatExpression;
-        }
-
-        /**
-         * Adds the ng-repeat directive to the element. In the case of multi-element (-start, -end) it adds the
-         * appropriate multi-element ng-repeat to the first and last element in the range.
-         * @param element
-         * @param attrs
-         * @param repeatExpression
-         */
-        function addNgRepeatToElement(element, attrs, repeatExpression) {
-            if (element[0].hasAttribute('dir-paginate-start') || element[0].hasAttribute('data-dir-paginate-start')) {
-                // using multiElement mode (dir-paginate-start, dir-paginate-end)
-                attrs.$set('ngRepeatStart', repeatExpression);
-                element.eq(element.length - 1).attr('ng-repeat-end', true);
-            } else {
-                attrs.$set('ngRepeat', repeatExpression);
-            }
-        }
-
-        /**
-         * Adds the dir-paginate-no-compile directive to each element in the tElement range.
-         * @param tElement
-         */
-        function addNoCompileAttributes(tElement) {
-            angular.forEach(tElement, function(el) {
-                if (el.nodeType === Node.ELEMENT_NODE) {
-                    angular.element(el).attr('dir-paginate-no-compile', true);
-                }
-            });
-        }
-
-        /**
-         * Removes the variations on dir-paginate (data-, -start, -end) and the dir-paginate-no-compile directives.
-         * @param element
-         */
-        function removeTemporaryAttributes(element) {
-            angular.forEach(element, function(el) {
-                if (el.nodeType === Node.ELEMENT_NODE) {
-                    angular.element(el).removeAttr('dir-paginate-no-compile');
-                }
-            });
-            element.eq(0).removeAttr('dir-paginate-start').removeAttr('dir-paginate').removeAttr('data-dir-paginate-start').removeAttr('data-dir-paginate');
-            element.eq(element.length - 1).removeAttr('dir-paginate-end').removeAttr('data-dir-paginate-end');
-        }
-
-        /**
-         * Creates a getter function for the current-page attribute, using the expression provided or a default value if
-         * no current-page expression was specified.
-         *
-         * @param scope
-         * @param attrs
-         * @param paginationId
-         * @returns {*}
-         */
-        function makeCurrentPageGetterFn(scope, attrs, paginationId) {
-            var currentPageGetter;
-            if (attrs.currentPage) {
-                currentPageGetter = $parse(attrs.currentPage);
-            } else {
-                // if the current-page attribute was not set, we'll make our own
-                var defaultCurrentPage = paginationId + '__currentPage';
-                scope[defaultCurrentPage] = 1;
-                currentPageGetter = $parse(defaultCurrentPage);
-            }
-            return currentPageGetter;
-        }
-    }
-
-    /**
-     * This is a helper directive that allows correct compilation when in multi-element mode (ie dir-paginate-start, dir-paginate-end).
-     * It is dynamically added to all elements in the dir-paginate compile function, and it prevents further compilation of
-     * any inner directives. It is then removed in the link function, and all inner directives are then manually compiled.
-     */
-    function noCompileDirective() {
-        return {
-            priority: 5000,
-            terminal: true
-        };
-    }
-
-    function dirPaginationControlsTemplateInstaller($templateCache) {
-        $templateCache.put('angularUtils.directives.dirPagination.template', '<ul class="pagination" ng-if="1 < pages.length"><li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(1)">&laquo;</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(pagination.current - 1)">&lsaquo;</a></li><li ng-repeat="pageNumber in pages track by $index" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == \'...\' }"><a href="" ng-click="setCurrent(pageNumber)">{{ pageNumber }}</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.current + 1)">&rsaquo;</a></li><li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.last)">&raquo;</a></li></ul>');
-    }
-
-    function dirPaginationControlsDirective(paginationService, paginationTemplate) {
-
-        var numberRegex = /^\d+$/;
-
-        return {
-            restrict: 'AE',
-            templateUrl: function(elem, attrs) {
-                return attrs.templateUrl || paginationTemplate.getPath();
-            },
-            scope: {
-                maxSize: '=?',
-                onPageChange: '&?',
-                paginationId: '=?'
-            },
-            link: dirPaginationControlsLinkFn
-        };
-
-        function dirPaginationControlsLinkFn(scope, element, attrs) {
-
-            // rawId is the un-interpolated value of the pagination-id attribute. This is only important when the corresponding dir-paginate directive has
-            // not yet been linked (e.g. if it is inside an ng-if block), and in that case it prevents this controls directive from assuming that there is
-            // no corresponding dir-paginate directive and wrongly throwing an exception.
-            var rawId = attrs.paginationId ||  DEFAULT_ID;
-            var paginationId = scope.paginationId || attrs.paginationId ||  DEFAULT_ID;
-
-            if (!paginationService.isRegistered(paginationId) && !paginationService.isRegistered(rawId)) {
-                var idMessage = (paginationId !== DEFAULT_ID) ? ' (id: ' + paginationId + ') ' : ' ';
-                throw 'pagination directive: the pagination controls' + idMessage + 'cannot be used without the corresponding pagination directive.';
-            }
-
-            if (!scope.maxSize) { scope.maxSize = 9; }
-            scope.directionLinks = angular.isDefined(attrs.directionLinks) ? scope.$parent.$eval(attrs.directionLinks) : true;
-            scope.boundaryLinks = angular.isDefined(attrs.boundaryLinks) ? scope.$parent.$eval(attrs.boundaryLinks) : false;
-
-            var paginationRange = Math.max(scope.maxSize, 5);
-            scope.pages = [];
-            scope.pagination = {
-                last: 1,
-                current: 1
-            };
-            scope.range = {
-                lower: 1,
-                upper: 1,
-                total: 1
-            };
-
-            scope.$watch(function() {
-                return (paginationService.getCollectionLength(paginationId) + 1) * paginationService.getItemsPerPage(paginationId);
-            }, function(length) {
-                if (0 < length) {
-                    generatePagination();
-                }
-            });
-
-            scope.$watch(function() {
-                return (paginationService.getItemsPerPage(paginationId));
-            }, function(current, previous) {
-                if (current != previous && typeof previous !== 'undefined') {
-                    goToPage(scope.pagination.current);
-                }
-            });
-
-            scope.$watch(function() {
-                return paginationService.getCurrentPage(paginationId);
-            }, function(currentPage, previousPage) {
-                if (currentPage != previousPage) {
-                    goToPage(currentPage);
-                }
-            });
-
-            scope.setCurrent = function(num) {
-                if (isValidPageNumber(num)) {
-                    num = parseInt(num, 10);
-                    paginationService.setCurrentPage(paginationId, num);
-                }
-            };
-
-            function goToPage(num) {
-                if (isValidPageNumber(num)) {
-                    scope.pages = generatePagesArray(num, paginationService.getCollectionLength(paginationId), paginationService.getItemsPerPage(paginationId), paginationRange);
-                    scope.pagination.current = num;
-                    updateRangeValues();
-
-                    // if a callback has been set, then call it with the page number as an argument
-                    if (scope.onPageChange) {
-                        scope.onPageChange({ newPageNumber : num });
-                    }
-                }
-            }
-
-            function generatePagination() {
-                var page = parseInt(paginationService.getCurrentPage(paginationId)) || 1;
-
-                scope.pages = generatePagesArray(page, paginationService.getCollectionLength(paginationId), paginationService.getItemsPerPage(paginationId), paginationRange);
-                scope.pagination.current = page;
-                scope.pagination.last = scope.pages[scope.pages.length - 1];
-                if (scope.pagination.last < scope.pagination.current) {
-                    scope.setCurrent(scope.pagination.last);
-                } else {
-                    updateRangeValues();
-                }
-            }
-
-            /**
-             * This function updates the values (lower, upper, total) of the `scope.range` object, which can be used in the pagination
-             * template to display the current page range, e.g. "showing 21 - 40 of 144 results";
-             */
-            function updateRangeValues() {
-                var currentPage = paginationService.getCurrentPage(paginationId),
-                    itemsPerPage = paginationService.getItemsPerPage(paginationId),
-                    totalItems = paginationService.getCollectionLength(paginationId);
-
-                scope.range.lower = (currentPage - 1) * itemsPerPage + 1;
-                scope.range.upper = Math.min(currentPage * itemsPerPage, totalItems);
-                scope.range.total = totalItems;
-            }
-
-            function isValidPageNumber(num) {
-                return (numberRegex.test(num) && (0 < num && num <= scope.pagination.last));
-            }
-        }
-
-        /**
-         * Generate an array of page numbers (or the '...' string) which is used in an ng-repeat to generate the
-         * links used in pagination
-         *
-         * @param currentPage
-         * @param rowsPerPage
-         * @param paginationRange
-         * @param collectionLength
-         * @returns {Array}
-         */
-        function generatePagesArray(currentPage, collectionLength, rowsPerPage, paginationRange) {
-            var pages = [];
-            var totalPages = Math.ceil(collectionLength / rowsPerPage);
-            var halfWay = Math.ceil(paginationRange / 2);
-            var position;
-
-            if (currentPage <= halfWay) {
-                position = 'start';
-            } else if (totalPages - halfWay < currentPage) {
-                position = 'end';
-            } else {
-                position = 'middle';
-            }
-
-            var ellipsesNeeded = paginationRange < totalPages;
-            var i = 1;
-            while (i <= totalPages && i <= paginationRange) {
-                var pageNumber = calculatePageNumber(i, currentPage, paginationRange, totalPages);
-
-                var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
-                var closingEllipsesNeeded = (i === paginationRange - 1 && (position === 'middle' || position === 'start'));
-                if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
-                    pages.push('...');
-                } else {
-                    pages.push(pageNumber);
-                }
-                i ++;
-            }
-            return pages;
-        }
-
-        /**
-         * Given the position in the sequence of pagination links [i], figure out what page number corresponds to that position.
-         *
-         * @param i
-         * @param currentPage
-         * @param paginationRange
-         * @param totalPages
-         * @returns {*}
-         */
-        function calculatePageNumber(i, currentPage, paginationRange, totalPages) {
-            var halfWay = Math.ceil(paginationRange/2);
-            if (i === paginationRange) {
-                return totalPages;
-            } else if (i === 1) {
-                return i;
-            } else if (paginationRange < totalPages) {
-                if (totalPages - halfWay < currentPage) {
-                    return totalPages - paginationRange + i;
-                } else if (halfWay < currentPage) {
-                    return currentPage - halfWay + i;
-                } else {
-                    return i;
-                }
-            } else {
-                return i;
-            }
-        }
-    }
-
-    /**
-     * This filter slices the collection into pages based on the current page number and number of items per page.
-     * @param paginationService
-     * @returns {Function}
-     */
-    function itemsPerPageFilter(paginationService) {
-
-        return function(collection, itemsPerPage, paginationId) {
-            if (typeof (paginationId) === 'undefined') {
-                paginationId = DEFAULT_ID;
-            }
-            if (!paginationService.isRegistered(paginationId)) {
-                throw 'pagination directive: the itemsPerPage id argument (id: ' + paginationId + ') does not match a registered pagination-id.';
-            }
-            var end;
-            var start;
-            if (collection instanceof Array) {
-                itemsPerPage = parseInt(itemsPerPage) || 9999999999;
-                if (paginationService.isAsyncMode(paginationId)) {
-                    start = 0;
-                } else {
-                    start = (paginationService.getCurrentPage(paginationId) - 1) * itemsPerPage;
-                }
-                end = start + itemsPerPage;
-                paginationService.setItemsPerPage(paginationId, itemsPerPage);
-
-                return collection.slice(start, end);
-            } else {
-                return collection;
-            }
-        };
-    }
-
-    /**
-     * This service allows the various parts of the module to communicate and stay in sync.
-     */
-    function paginationService() {
-
-        var instances = {};
-        var lastRegisteredInstance;
-
-        this.registerInstance = function(instanceId) {
-            if (typeof instances[instanceId] === 'undefined') {
-                instances[instanceId] = {
-                    asyncMode: false
-                };
-                lastRegisteredInstance = instanceId;
-            }
-        };
-
-        this.isRegistered = function(instanceId) {
-            return (typeof instances[instanceId] !== 'undefined');
-        };
-
-        this.getLastInstanceId = function() {
-            return lastRegisteredInstance;
-        };
-
-        this.setCurrentPageParser = function(instanceId, val, scope) {
-            instances[instanceId].currentPageParser = val;
-            instances[instanceId].context = scope;
-        };
-        this.setCurrentPage = function(instanceId, val) {
-            instances[instanceId].currentPageParser.assign(instances[instanceId].context, val);
-        };
-        this.getCurrentPage = function(instanceId) {
-            var parser = instances[instanceId].currentPageParser;
-            return parser ? parser(instances[instanceId].context) : 1;
-        };
-
-        this.setItemsPerPage = function(instanceId, val) {
-            instances[instanceId].itemsPerPage = val;
-        };
-        this.getItemsPerPage = function(instanceId) {
-            return instances[instanceId].itemsPerPage;
-        };
-
-        this.setCollectionLength = function(instanceId, val) {
-            instances[instanceId].collectionLength = val;
-        };
-        this.getCollectionLength = function(instanceId) {
-            return instances[instanceId].collectionLength;
-        };
-
-        this.setAsyncModeTrue = function(instanceId) {
-            instances[instanceId].asyncMode = true;
-        };
-
-        this.isAsyncMode = function(instanceId) {
-            return instances[instanceId].asyncMode;
-        };
-    }
-
-    /**
-     * This provider allows global configuration of the template path used by the dir-pagination-controls directive.
-     */
-    function paginationTemplateProvider() {
-
-        var templatePath = 'angularUtils.directives.dirPagination.template';
-
-        this.setPath = function(path) {
-            templatePath = path;
-        };
-
-        this.$get = function() {
-            return {
-                getPath: function() {
-                    return templatePath;
-                }
-            };
-        };
-    }
-})();
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.plus-gallery-directive', [])
-    .directive('pcdPlusGallery', GalleryPlusDirective);
-
-    GalleryPlusDirective.$inject = [];
-
-    function GalleryPlusDirective(ExportService) {
-
-        var directive = {
-            link: function (scope, element, attrs) {
-                $(element).attr('data-userid', attrs.userid);
-
-                $(element).plusGallery();
-            }
-        }
-
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                directive.link(scope, element, attrs);
-            }
-        }
-
-    }
-
-}());
-(function () {
-
-    'use strict';
-
-    angular.module('pineappleclub.app-configuration-service', [])
+    angular.module('orchard.app-configuration-service', [])
     .factory('AppConfigurationService', AppConfigurationService);
 
     AppConfigurationService.$inject = [];
@@ -1710,7 +728,7 @@
                 name: 'orchard'
             },
             page: {
-                titlePrefix: 'Pineapple Club'
+                titlePrefix: 'orchard'
             },            
             companyInfo: {
                 name: 'orchard'
@@ -1736,8 +754,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.auth-interceptor-service', [
-        'pineappleclub.auth-events-constant'
+    angular.module('orchard.auth-interceptor-service', [
+        'orchard.auth-events-constant'
     ])
     .factory('AuthInterceptor', AuthInterceptor);
 
@@ -1766,9 +784,9 @@
 
     'use strict';    
 
-    angular.module('pineappleclub.auth-service', [
-        'pineappleclub.cookie-service',
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.auth-service', [
+        'orchard.cookie-service',
+        'orchard.app-configuration-service'
     ])
     .factory('AuthService', AuthService);
 
@@ -1869,7 +887,110 @@
 
     'use strict';
 
-    angular.module('pineappleclub.cookie-service', [])
+    angular.module('orchard.client-service', [])
+    .factory('ClientService', ClientService);
+
+    ClientService.$inject = [];
+
+    function ClientService() {
+        var clientService = {
+            getClients: getClients
+        };
+
+        return clientService;
+
+        function getClients() {
+            return [{
+                "id": 1,
+                "title": "AMC",
+                "nodes": []
+            },
+            {
+                "id": 2,
+                "title": "Belersdorf",
+                "nodes": []
+            },
+            {
+                "id": 3,
+                "title": "DST",
+                "nodes": []
+            },
+            {
+                "id": 4,
+                "title": "Eletrolux",
+                "nodes": []
+            },
+            {
+                "id": 5,
+                "title": "Fox",
+                "nodes": []
+            },
+            {
+                "id": 6,
+                "title": "Galderma",
+                "nodes": []
+            },
+            {
+                "id": 7,
+                "title": "Investa",
+                "nodes": []
+            },
+            {
+                "id": 8,
+                "title": "MCN",
+                "nodes": []
+            },
+            {
+                "id": 9,
+                "title": "Merisant",
+                "nodes": [
+                    {
+                        "id": 91,
+                        "title": "Equal - APAC",
+                        "nodes": [
+                            {
+                                "id": 911,
+                                "title": "Design",
+                                "nodes": []
+                            },
+                            {
+                                "id": 912,
+                                "title": "Stage",
+                                "nodes": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 10,
+                "title": "Orchard",
+                "nodes": []
+            },
+            {
+                "id": 11,
+                "title": "Pfizer",
+                "nodes": []
+            },
+            {
+                "id": 12,
+                "title": "Variety",
+                "nodes": []
+            },
+            {
+                "id": 13,
+                "title": "Video Ezy",
+                "nodes": []
+            }];
+        }
+    }
+
+}());
+(function () {
+
+    'use strict';
+
+    angular.module('orchard.cookie-service', [])
     .factory('CookieService', CookieService);
 
     CookieService.$inject = [];
@@ -1905,8 +1026,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.data-service', [
-        'pineappleclub.entity-manager-factory'
+    angular.module('orchard.data-service', [
+        'orchard.entity-manager-factory'
     ])
     .factory('DataService', DataService);
 
@@ -1941,9 +1062,9 @@
 (function() {
     'use strict';
 
-    angular.module('pineappleclub.entity-manager-factory', [
-        'pineappleclub.model',
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.entity-manager-factory', [
+        'orchard.model',
+        'orchard.app-configuration-service'
     ])
     .factory('EntityManagerFactory', EntityManagerFactory);
 
@@ -2010,7 +1131,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.export-service', [])
+    angular.module('orchard.export-service', [])
     .factory('ExportService', ExportService);
 
     ExportService.$inject = [];
@@ -2028,8 +1149,8 @@
 (function() {
     'use strict';
 
-    angular.module("pineappleclub.meta-data", [
-        'pineappleclub.user-model'
+    angular.module("orchard.meta-data", [
+        'orchard.user-model'
     ])
     .factory('metadata', Metadata);
 
@@ -2113,9 +1234,9 @@
 
     'use strict';
 
-    angular.module('pineappleclub.model', [
-        'pineappleclub.meta-data',
-        'pineappleclub.user-model'
+    angular.module('orchard.model', [
+        'orchard.meta-data',
+        'orchard.user-model'
     ])
     .factory('model', factory);
 
@@ -2157,8 +1278,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.navigator-service', [
-        'pineappleclub.app-configuration-service'
+    angular.module('orchard.navigator-service', [
+        'orchard.app-configuration-service'
     ])
     .factory('NavigatorService', NavigatorService);
 
@@ -2206,12 +1327,12 @@
 
     'use strict';
 
-    angular.module('pineappleclub.state-change-service', [
+    angular.module('orchard.state-change-service', [
         'ngProgress',
-        'pineappleclub.state-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.auth-events-constant',
-        'pineappleclub.authorisation-constant'
+        'orchard.state-service',
+        'orchard.auth-service',
+        'orchard.auth-events-constant',
+        'orchard.authorisation-constant'
     ])
     .factory('StateChangeService', StateChangeService);
 
@@ -2262,8 +1383,8 @@
 
     'use strict';
 
-    angular.module('pineappleclub.state-service', [
-        'pineappleclub.authorisation-constant'
+    angular.module('orchard.state-service', [
+        'orchard.authorisation-constant'
     ])
     .factory('StateService', StateService);
 
@@ -2291,7 +1412,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.user-service', [])
+    angular.module('orchard.user-service', [])
     .factory('UserService', UserService);
 
     UserService.$inject = [];
@@ -2317,7 +1438,7 @@
 
     'use strict';
 
-    angular.module('pineappleclub.util-service', [])
+    angular.module('orchard.util-service', [])
     .factory('UtilService', UtilService);
 
     UtilService.$inject = [];

@@ -6,7 +6,7 @@
         empty: ""
     };
 
-    angular.module('pineappleclub.string-constant', [])
+    angular.module('orchard.string-constant', [])
     .constant('STRING', STRING);
 
 }());

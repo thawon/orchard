@@ -9,7 +9,7 @@
         L: "lg"
     };
 
-    angular.module('pineappleclub.device-sizes-constant', [])
+    angular.module('orchard.device-sizes-constant', [])
     .constant('DEVICE_SIZES', DEVICE_SIZES);
 
 }());

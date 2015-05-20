@@ -2,13 +2,13 @@
 
     'use strict';
 
-    angular.module('pineappleclub.login', [
-        'pineappleclub.auth-service',
-        'pineappleclub.state-service',
-        'pineappleclub.user-service',
-        'pineappleclub.auth-events-constant',
-        'pineappleclub.string-constant',
-        'pineappleclub.user-profile-service'
+    angular.module('orchard.login', [
+        'orchard.auth-service',
+        'orchard.state-service',
+        'orchard.user-service',
+        'orchard.auth-events-constant',
+        'orchard.string-constant',
+        'orchard.user-profile-service'
     ])
         .controller('LoginController', LoginController);
 

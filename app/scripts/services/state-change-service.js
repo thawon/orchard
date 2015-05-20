@@ -2,12 +2,12 @@
 
     'use strict';
 
-    angular.module('pineappleclub.state-change-service', [
+    angular.module('orchard.state-change-service', [
         'ngProgress',
-        'pineappleclub.state-service',
-        'pineappleclub.auth-service',
-        'pineappleclub.auth-events-constant',
-        'pineappleclub.authorisation-constant'
+        'orchard.state-service',
+        'orchard.auth-service',
+        'orchard.auth-events-constant',
+        'orchard.authorisation-constant'
     ])
     .factory('StateChangeService', StateChangeService);
 
