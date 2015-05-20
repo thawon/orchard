@@ -30,17 +30,17 @@
         };
 
         // production connection string
-        mongoUrl = 'mongodb://pineappleclub:CB_FhmudQikwCHn6eK.e3NShH6dvjC_gCpbIMllNJBw-@ds060977.mongolab.com:60977/pineappleclub';
+        mongoUrl = 'mongodb://console:zzKBugqlYUaCJRsRP9b.KzkxAxWuQJ_DyCClmRKoUmI-@ds041167.mongolab.com:41167/console';
 
         if (!process.env.NODE_ENV) {
 
             // development connection string
-            mongoUrl = 'mongodb://localhost:27017/pineappleclub';
+            mongoUrl = 'mongodb://localhost:27017/console';
 
         } else if (process.env.NODE_ENV === 'test') {
 
             // e2e connection string
-            mongoUrl = 'mongodb://localhost:27017/pineappleclub_test';
+            mongoUrl = 'mongodb://localhost:27017/console_test';
 
         }
 
