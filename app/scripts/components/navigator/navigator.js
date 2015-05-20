@@ -19,19 +19,11 @@
         
         states = _.filter(AUTHORISATION.STATES.states,
             function (state) {
-                return state.name === 'home'
-                    || state.name === 'services'
-                    || state.name === 'philosophy'
-                    || state.name === 'photos'
-                    || state.name === 'contact';
+                return (state.data.authorizedRoles.indexOf(AUTHORISATION.USER_ROLES.admin) !== -1)
+                        && state.name !== 'dashboard';
             });
 
-        that.companyInfo = AppConfigurationService.companyInfo;
-        that.states = states;
-        
-        that.toggleSideBar = function () {
-            $('.row-offcanvas').toggleClass('active');
-        }
+        that.states = states;                
     }
 
 }());

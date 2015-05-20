@@ -1,32 +1,36 @@
-#ds_header_div
-{
-	font-size: @font-size-large;
-	color: @app-font-color;
-	margin-bottom: 10px;
-}
-
-.tile-image {
-	width:100%; 
-	height:100%;
-    
-}
-
-.tile-size {
-    border:0;
-    text-align: center;
-    color: @app-font-color;
+#ds_right {
     font-size: @font-size-base;
+    color: @app-font-color;
 }
 
-@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-	.tile-size{
-		width:180px; 
-		height:180px;
-	}
+#ds_header {
+    border-bottom: 1px solid #cccccc;
 }
-@media (min-width: @screen-lg-min) {
-	.tile-size{
-		width:200px; 
-		height:200px;
-	}
+
+#ds_Edit_button {
+    float: right;
+}
+
+table.version-control {
+    width: 100%;
+}
+
+table.version-control td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+table.website {
+    margin-top:10px;
+    width: 100%;    
+}
+
+table.website td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+table.website tr:first-child {
+    background-color: #d1cfb8;
+    font-weight: bold;
 }

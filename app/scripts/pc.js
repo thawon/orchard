@@ -160,32 +160,13 @@
     ];
 
     function DashboardController(AUTHORISATION, VIEW_MODES, UserService) {
-        var that = this,
-            states, userProfileState, userProfilestateParams;
-
-        that.currentUser = UserService.getCurrentUser();
-
-        states = _.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return (state.data.authorizedRoles.indexOf(that.currentUser.userRole) !== -1)
-                        && state.name !== 'dashboard'
-                        && state.name !== 'user-profile';
-            });
-
-        userProfileState = _.clone(_.first(_.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return (state.name == 'user-profile');
-            })));
+        var that = this;
         
-        states.unshift(userProfileState);
+        that.mode = mode;
 
-        userProfilestateParams = {
-            userId: that.currentUser._id,
-            mode: VIEW_MODES.show
-        };
-        userProfileState.name += '(' + JSON.stringify(userProfilestateParams) + ')';
-
-        that.states = states;
+        function mode() {
+            return 'show';
+        }
     }
 
 }());
@@ -445,19 +426,11 @@
         
         states = _.filter(AUTHORISATION.STATES.states,
             function (state) {
-                return state.name === 'home'
-                    || state.name === 'services'
-                    || state.name === 'philosophy'
-                    || state.name === 'photos'
-                    || state.name === 'contact';
+                return (state.data.authorizedRoles.indexOf(AUTHORISATION.USER_ROLES.admin) !== -1)
+                        && state.name !== 'dashboard';
             });
 
-        that.companyInfo = AppConfigurationService.companyInfo;
-        that.states = states;
-        
-        that.toggleSideBar = function () {
-            $('.row-offcanvas').toggleClass('active');
-        }
+        that.states = states;                
     }
 
 }());
@@ -810,78 +783,9 @@
         states:
             [
                 {
-                    name: 'home',
-                    display: 'Home',
-                    url: '/',
-                    templateUrl: 'scripts/components/home/home.html',
-                    controller: 'HomeController as home',
-                    data: {
-                        authorizedRoles: [USER_ROLES.all],
-                        page: {
-                            title: 'Child Care Service',
-                            description: 'We provide high quality child care service supported by Integricare.' +
-                                            'The service is operated by experienced diploma qualification educator.'
-                        }
-                    }
-                },
-                {
-                    name: 'services',
-                    display: 'Services',
-                    url: '/services',
-                    templateUrl: 'scripts/components/services/services.html',
-                    data: {
-                        authorizedRoles: [USER_ROLES.all],
-                        page: {
-                            title: 'Family Day Care, Before/After school care, Vocation care',
-                            description: 'We provide Family Day Care, Before/After school care and Vocation care.'
-                        }
-                    }
-                },
-                {
-                    name: 'philosophy',
-                    display: 'Philosophy',
-                    url: '/philosophy',
-                    templateUrl: 'scripts/components/philosophy/philosophy.html',
-                    data: {
-                        authorizedRoles: [USER_ROLES.all],
-                        page: {
-                            title: "Unlocking child's full potential",
-                            description: "We believe early learning is the key to unlocking a child's full potential."
-                        }
-                    }
-                },
-                {
-                    name: 'photos',
-                    display: 'Photos',
-                    url: '/photos',
-                    templateUrl: 'scripts/components/photos/photos.html',
-                    controller: 'PhotosController as photos',
-                    data: {
-                        authorizedRoles: [USER_ROLES.all],
-                        page: {
-                            title: 'Playroom, Creative corner, Art and craft and outside playground',
-                            description: 'Our facilities are Playroom, Creative corner, Art and craft and outside playground.'
-                        }
-                    }
-                },
-                {
-                    name: 'contact',
-                    display: 'Contact',
-                    url: '/contact',
-                    templateUrl: 'scripts/components/contact/contact.html',
-                    controller: 'ContactController as contact',
-                    data: {
-                        authorizedRoles: [USER_ROLES.all],
-                        page: {
-                            title: 'Near Rockdale and Banksia train station',
-                            description: 'Our location is near Rockdale and Banksia train station.'
-                        }
-                    }
-                },
-                {
                     name: 'dashboard',
                     display: 'Dashboard',
-                    url: '/dashboard',
+                    url: '/',
                     templateUrl: 'scripts/components/dashboard/dashboard.html',
                     controller: 'DashboardController as dashboard',
                     data: {
@@ -918,34 +822,30 @@
                     }
                 },
                 {
-                    name: 'user-profile',
-                    display: 'My Profile',
-                    url: '/user-profile/:userId?mode',
-                    templateUrl: 'scripts/components/user-profile/user-profile.html',
-                    controller: 'UserProfileController as userProfile',
+                    name: 'intranet',
+                    display: 'Intranet',
+                    url: '/intranet',
+                    templateUrl: 'scripts/components/intranet/intranet.html',
                     data: {
                         authorizedRoles: [USER_ROLES.admin],
                         page: {
-                            title: 'User Profile Details',
-                            description: 'View/Edit user profile'
+                            title: 'Signout',
+                            description: 'User is signed out'
                         }
-                    },
-                    icon: '/images/user-profile.png'
+                    }
                 },
                 {
-                    name: 'user-profile-list',
-                    display: 'Users',
-                    url: '/user-profile-list',
-                    templateUrl: 'scripts/components/user-profile-list/user-profile-list.html',
-                    controller: 'UserProfileListController as userProfileList',
+                    name: 'project-admin',
+                    display: 'Porject Admin',
+                    url: '/intranet',
+                    templateUrl: 'scripts/components/intranet/intranet.html',
                     data: {
                         authorizedRoles: [USER_ROLES.admin],
                         page: {
-                            title: 'Users',
-                            description: 'List of users'
+                            title: 'Signout',
+                            description: 'User is signed out'
                         }
-                    },
-                    icon: '/images/user-profile-list.png'
+                    }
                 }
             ]
     };
@@ -1807,23 +1707,13 @@
     function AppConfigurationService() {
         var configuration = {
             project: {
-                name: 'Pineapple Club Website'
+                name: 'orchard'
             },
             page: {
                 titlePrefix: 'Pineapple Club'
-            },
-            googlePlusUserId: '102015599606810374225',
+            },            
             companyInfo: {
-                name: 'Pineapple Club Family Day Care',
-                location: {
-                    lat: -33.945967,
-                    lng: 151.137092
-                },
-                contact: {
-                    phone: '(02) 8041 8101',
-                    mobile: '04 6625 0622',
-                    email: 'mui@pineappleclub.com.au'
-                }
+                name: 'orchard'
             },
             progress: {
                 color: '#1d9ad9'

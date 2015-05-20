@@ -1,18 +1,81 @@
 ﻿<!-- ds = "dashboard" -->
 <div>
-    <div id="ds_header_div">
-        Welcome <span>{{dashboard.currentUser.firstname + ' ' + dashboard.currentUser.lastname}}</span>
-    </div>
-    <div id="hm_items_div" class="container">
-
-        <div ng-repeat="state in dashboard.states" class="col-xs-4 col-sm-3">
-            <div class="thumbnail img-responsive tile-size">
-                <a ui-sref="{{state.name}}"><img class="tile-image" ng-src="{{state.icon}}"><span ng-bind="state.display"></span></a>                
-            </div>
+     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2">
+        
+     </div>
+     <div id="ds_right" class="col-xs-8 col-sm-8 col-md-8 col-lg-10">
+        <div id="ds_header">
+            <button id="ds_Edit_button" class="btn btn-sm btn-primary dashboard-button">Edit</button>
+            <h2>Design</h2>
         </div>
+        
+        <br />
 
-        <!--<div class="thumbnail img-responsive tile-size">
-            <a ui-sref="user-profile({userId:'fooVal1', mode:'edit'})"><img class="tile-image"><span>my profile test</span></a>
-        </div>-->
+        <p>
+            Flat HTML site for creating base html and css and some Javascript to be used to create templates from the EpiServer build site.
+        </p>
+         
+         <h3>
+             Version Control
+         </h3>
+         
+         <table class="version-control">
+             <tr>
+                 <td>Repository Location:</td>
+                 <td><a href="https://your.repo.location">https://your.repo.location</a></td>
+             </tr>
+             <tr>
+                 <td>View Repo:</td>
+                 <td><a href="https://your.repo.location">https://your.repo.location</a></td>
+             </tr>
+             <tr>
+                 <td>Activity Log:</td>
+                 <td><a>View Log</a></td>
+             </tr>
+         </table>
+
+         <h3>
+             Hosting
+         </h3>
+
+         <p>
+            No information available
+        </p>
+
+        <pcd-expandable-container data-header="Websites">
+            <pcd-entity-detail-container save-fn="userProfile.save()" cancel-fn="userProfile.cancel()" validate-fn="userProfile.validate()" mode-fn="dashboard.mode()">
+                <div data-detail data-mode="show">
+                    <table class="website">
+                        <tr>
+                            <td>Description:</td>
+                        </tr>
+                        <tr>
+                            <td>Only run locally</td>
+                        </tr>
+                    </table>
+
+                    <table class="website">
+                        <tr>
+                            <td>URL:</td>
+                        </tr>
+                        <tr>
+                            <td>http://localhost</td>
+                        </tr>
+                    </table>
+                </div>
+                <div data-detail data-mode="edit">
+                    <table>
+                        <tr>
+                            <td><label>Description:</label></td>
+                            <td><input type="text"class="input-text-default" value="Only run locally"></td>
+                        </tr>
+                        <tr>
+                            <td><label>URL:</label></td>
+                            <td><input type="text" class="input-text-default" value="http://localhost"></td>
+                        </tr>
+                    </table>
+                </div>
+            </pcd-entity-detail-container>
+        </pcd-expandable-container>
     </div>
 </div>

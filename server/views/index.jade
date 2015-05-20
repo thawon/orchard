@@ -3,28 +3,20 @@ doctype html
 html(lang="en", ng-app="pineappleclub")
   head
     base(href="/index.html")
-    title="Pineapple Club - Child Care Service | Banksia"
+    title="Orchard coding test"
     meta(name="google-site-verification", content="NtzdEuPKDVSmYCyX4rWinbQER6YkqS8F5e0fWNgtTsg")
     meta(name="description", content="High quality child care service supported by Integricare. Our location is near Rockdale and Banksia train station. Family Day Care, Before/After school care, Vocation care")
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(rel='stylesheet', href='styles/custom-bootstrap.css')
-    link(rel='stylesheet', href='styles/offcanvas.css')
-    link(rel='stylesheet', href='styles/ngProgress.css')
-    link(rel='stylesheet', href='styles/plusgallery.css')
-    link(rel='stylesheet', href='styles/toaster.css')
   body(ng-controller="ApplicationController")    
-    div.container
-      toaster-container(toaster-options="{'position-class': 'toast-bottom-center'}")
-      div.row.row-offcanvas.row-offcanvas-right
-        div.col-xs-12.col-sm-12 
-          div(ng-include="'scripts/components/navigator/navigator.html'")
-          div(ng-include="'scripts/components/header-admin/header-admin.html'")
-          div(ng-include="'scripts/components/header-client/header-client.html'")
-          div(ui-view)
-        div(ng-include="'scripts/components/side-bar/side-bar.html'")
-      div(ng-include="'scripts/components/footer/footer.html'")
+    div#wrap
+      div(ng-include="'scripts/components/header/header.html'")
+      div(ng-include="'scripts/components/navigator/navigator.html'")
+      div(ui-view)
+      div#push
+    div(ng-include="'scripts/components/footer/footer.html'")
     div.device-xs.visible-xs
     div.device-sm.visible-sm
     div.device-md.visible-md

@@ -1,20 +1,8 @@
 <nav class="navbar navbar-default" role="navigation" ng-controller="NavigatorController as navigator">
     <div class="container-fluid">
-
-        <div class="navbar-header">
-            <div>
-                <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-collapse" ng-click="navigator.toggleSideBar()">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-            </div>
-            <a id="nv_brand_a" class="navbar-brand" ng-href="#" ng-bind="navigator.companyInfo.name"></a>
-        </div>
         
         <div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse">
                 <menu class="nav navbar-nav navbar-right">
                     <li ng-repeat="state in navigator.states">
                         <a ui-sref="{{state.name}}" ng-bind="state.display"></a>

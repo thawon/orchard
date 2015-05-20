@@ -16,32 +16,13 @@
     ];
 
     function DashboardController(AUTHORISATION, VIEW_MODES, UserService) {
-        var that = this,
-            states, userProfileState, userProfilestateParams;
-
-        that.currentUser = UserService.getCurrentUser();
-
-        states = _.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return (state.data.authorizedRoles.indexOf(that.currentUser.userRole) !== -1)
-                        && state.name !== 'dashboard'
-                        && state.name !== 'user-profile';
-            });
-
-        userProfileState = _.clone(_.first(_.filter(AUTHORISATION.STATES.states,
-            function (state) {
-                return (state.name == 'user-profile');
-            })));
+        var that = this;
         
-        states.unshift(userProfileState);
+        that.mode = mode;
 
-        userProfilestateParams = {
-            userId: that.currentUser._id,
-            mode: VIEW_MODES.show
-        };
-        userProfileState.name += '(' + JSON.stringify(userProfilestateParams) + ')';
-
-        that.states = states;
+        function mode() {
+            return 'show';
+        }
     }
 
 }());

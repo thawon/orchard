@@ -7,7 +7,7 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     script: "server.js",
-                    node_env: "production",
+                    node_env: undefined,
                     debug: true
                 }
             },
