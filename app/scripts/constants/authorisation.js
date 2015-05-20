@@ -68,7 +68,7 @@
                     name: 'project-admin',
                     display: 'Project Admin',
                     url: '/project-admin',
-                    templateUrl: 'scripts/components/intranet/intranet.html',
+                    templateUrl: 'scripts/components/project-admin/project-admin.html',
                     data: {
                         authorizedRoles: [USER_ROLES.admin],
                         page: {
